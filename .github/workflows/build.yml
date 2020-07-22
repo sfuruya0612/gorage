@@ -1,0 +1,60 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Get language versions
+        id: versions
+        run: |
+          NODE_VERSION=$(grep nodejs .tool-versions | awk '{print $2}')
+          echo "::set-env name=NODE_VERSION::${NODE_VERSION}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Node.js install dependencies & test
+        run: |
+          make frontend.test
+
+  server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Get language versions
+        id: versions
+        run: |
+          GO_VERSION=$(grep golang .tool-versions | awk '{print $2}')
+          echo "::set-env name=GO_VERSION::${GO_VERSION}"
+
+      - name: Set up Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Go get dependencies & test
+        run: |
+          export GOPATH=$HOME/go
+          export GOBIN=$(go env GOPATH)/bin
+          export PATH=$PATH:$GOPATH
+          export PATH=$PATH:$GOBIN
+
+          go get -v -u honnef.co/go/tools/cmd/staticcheck
+          go get -v -u github.com/kisielk/errcheck
+          go get -v -t -d ./...
+          make server.test

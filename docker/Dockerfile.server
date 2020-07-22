@@ -1,0 +1,24 @@
+FROM golang:1.13.12-alpine as build
+
+RUN apk update \
+    && apk upgrade \
+    && apk --no-cache add gcc make libc-dev
+
+COPY . /app
+WORKDIR /app
+
+RUN go get -v -u honnef.co/go/tools/cmd/staticcheck \
+    && go get -v -u github.com/kisielk/errcheck \
+    && go get -v -t -d ./... \
+    && make server.test \
+    && go install ./...
+
+FROM alpine:latest as production
+
+ARG APP_NAME
+
+RUN apk update && apk upgrade
+
+COPY --from=build /go/bin/${APP_NAME} /usr/local/bin/
+
+ENTRYPOINT [ "gorage" ]

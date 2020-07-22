@@ -1,0 +1,47 @@
+openapi: 3.0.2
+
+info:
+  title: gorage API document
+  description: |
+    gorage API document
+  version: 1.0.0
+
+servers:
+  - url: "http://localhost:8080/"
+    description: "Test"
+
+paths:
+  "/api/ping":
+    get:
+      description: |
+        ping
+      parameters:
+        - $ref: "#/components/parameters/contentType"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    $ref: "#/components/schemas/ping"
+
+components:
+  parameters:
+    contentType:
+      name: Content-Type
+      in: header
+      description: "コンテンツタイプ"
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    ping:
+      type: object
+      properties:
+        Admin:
+          type: string
+          description: "pon! pon!"

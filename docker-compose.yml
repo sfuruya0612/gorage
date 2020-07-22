@@ -1,0 +1,28 @@
+version: "3.7"
+
+networks:
+  app_default:
+    driver: "bridge"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.frontend
+    links:
+      - server
+    networks:
+      - app_default
+    ports:
+      - "80:80"
+
+  server:
+    build:
+      args:
+        - APP_NAME=${APP_NAME}
+      context: .
+      dockerfile: ./docker/Dockerfile.server
+    networks:
+      - app_default
+    ports:
+      - "8080:8080"
