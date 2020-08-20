@@ -1,7 +1,13 @@
 package main
 
-import "github.com/sfuruya0612/gorage/infrastructure"
+import (
+	"fmt"
+
+	"github.com/sfuruya0612/gorage/infrastructure"
+)
 
 func main() {
-	infrastructure.Router.Run()
+	if err := infrastructure.Router.Run(); err != nil {
+		fmt.Printf("Error: %v", err)
+	}
 }

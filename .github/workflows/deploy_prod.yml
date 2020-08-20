@@ -1,4 +1,4 @@
-name: Deploy to GAE
+name: Production deploy to GAE
 
 on:
   push:

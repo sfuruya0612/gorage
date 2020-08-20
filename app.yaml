@@ -1,4 +1,4 @@
-runtime: go113
+runtime: go114
 
 service: gorage
 
@@ -13,6 +13,6 @@ handlers:
     upload: static/index.html
     secure: always
 
-# - url: /.*
-#   script: auto
-#   secure: always
+  - url: /api/(.*)
+    script: _go_app
+    secure: always
