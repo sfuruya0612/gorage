@@ -14,5 +14,5 @@ handlers:
     secure: always
 
   - url: /api/(.*)
-    script: _go_app
+    script: auto
     secure: always
