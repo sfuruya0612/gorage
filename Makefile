@@ -1,4 +1,4 @@
-GCP_PROJECT :=
+GCP_PROJECT := prism-hack
 APP_NAME := $(shell basename $(shell pwd))
 VERSION := $(shell TZ=Asia/Tokyo date +%Y%m%d)
 
@@ -7,6 +7,10 @@ init:
 	asdf install
 	pushd frontend; yarn install; popd
 	go get -v -t -d ./...
+
+format:
+	go mod tidy
+	go fmt ./...
 
 # Docs
 docs.build:

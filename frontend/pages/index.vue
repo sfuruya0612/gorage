@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <Logo />
-      <h1 class="title">gae-sample</h1>
+      <h1 class="title">gorage</h1>
       <div class="links">
         <a
           href="https://nuxtjs.org/"

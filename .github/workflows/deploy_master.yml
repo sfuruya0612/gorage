@@ -1,0 +1,39 @@
+name: Deploy to GAE
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get versions
+        id: versions
+        run: |
+          NODE_VERSION=$(grep nodejs .tool-versions | awk '{print $2}')
+          echo "::set-env name=NODE_VERSION::${NODE_VERSION}"
+
+          TAG=${GITHUB_REF#refs/*/}
+          RELEASE_VERSION=${TAG//\./-}
+          echo "::set-env name=RELEASE_VERSION::${RELEASE_VERSION}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set up Google Cloud SDK
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: GAE deploy
+        run: |
+          make frontend.build
+          gcloud app deploy --no-promote --quiet --version=master --project=${{ secrets.GCP_PROJECT_ID }}
