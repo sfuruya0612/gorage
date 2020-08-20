@@ -1,14 +1,18 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 )
 
 func HealthCheck(c *gin.Context) {
-	fmt.Println(c.Cookie("domain"))
+	cookie, err := c.Cookie("foo")
+	if err != nil {
+		cookie = "none"
+		// fmt.Printf("Error: %v", err)
+	}
+
 	c.JSON(200, gin.H{
 		"message": "OK",
+		"cookie":  cookie,
 	})
 }

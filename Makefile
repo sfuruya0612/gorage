@@ -29,7 +29,12 @@ set.project: login
 
 # GAE Deployment
 deploy: frontend.build
-	gcloud app deploy --no-promote --quiet --version=${VERSION}
+	docker run -it --rm \
+		-v ${HOME}/.config/gcloud:/root/.config/gcloud \
+		-v $(shell pwd):/app \
+		-w /app \
+		google/cloud-sdk:latest \
+		gcloud app deploy --no-promote --quiet --version=${VERSION} --project=${GCP_PROJECT}
 
 browse:
 	gcloud app browse --service=${APP_NAME} --version=${VERSION}

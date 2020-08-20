@@ -3,15 +3,15 @@ runtime: go114
 service: gorage
 
 handlers:
-  - url: /(.*\.(gif|png|jpeg|jpg|css|js|ico))$
-    static_files: static/\1
-    upload: static/(.*)
-    secure: always
+  # - url: /(.*\.(gif|png|jpeg|jpg|css|js|ico))$
+  #   static_files: static/\1
+  #   upload: static/(.*)
+  #   secure: always
 
-  - url: /(.*)
-    static_files: static/index.html
-    upload: static/index.html
-    secure: always
+  # - url: /(.*)
+  #   static_files: static/index.html
+  #   upload: static/index.html
+  #   secure: always
 
   - url: /api/(.*)
     script: auto
